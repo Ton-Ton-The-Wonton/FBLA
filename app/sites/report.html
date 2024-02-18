@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Report</title>
+
+    <style>
+        #organizationTable,
+        #typeTable {
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 5px;
+        }
+
+        #organizationTable th,
+        #organizationTable td,
+        #typeTable th,
+        #typeTable td {
+            border: 1px solid #dee2e6;
+            padding: 0.75rem;
+            table-layout: fixed;
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <div class="container-fluid mt-5">
+        <h2 class="text-center">Partner Report</h2>
+
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h4>Organization Groups</h4>
+                <table id="organizationTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Organization</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h4>Type Groups</h4>
+                <table id="typeTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Type of Organization</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:5003/partner/report";
+        const REQUEST_METHOD = "POST";
+
+        function loadReport() {
+            $.ajax({
+                url: API_URL,
+                type: REQUEST_METHOD,
+                success: function (response) {
+                    if (response.code === 0) {
+                        populateOrganizationTable(response.data.organization_groups);
+                        populateTypeTable(response.data.type_groups);
+                    } else {
+                        console.log("Error: " + response.msg);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("Error: " + textStatus + " , " + errorThrown);
+                }
+            });
+        }
+
+        function populateOrganizationTable(data) {
+            $("#organizationTable tbody").empty();
+
+            for (var i = 0; i < data.length; i++) {
+                var row = document.createElement("tr");
+                var organizationCell = document.createElement("td");
+                organizationCell.textContent = data[i].organization;
+                row.appendChild(organizationCell);
+
+                var countCell = document.createElement("td");
+                countCell.textContent = data[i].count;
+                row.appendChild(countCell);
+
+                var tableBody = document.getElementById("organizationTable").getElementsByTagName("tbody")[0];
+                tableBody.appendChild(row);
+            }
+        }
+
+        function populateTypeTable(data) {
+            $("#typeTable tbody").empty();
+
+            for (var i = 0; i < data.length; i++) {
+                var row = document.createElement("tr");
+                var typeCell = document.createElement("td");
+                typeCell.textContent = data[i].type_of_organization;
+                row.appendChild(typeCell);
+
+                var countCell = document.createElement("td");
+                countCell.textContent = data[i].count;
+                row.appendChild(countCell);
+
+                var tableBody = document.getElementById("typeTable").getElementsByTagName("tbody")[0];
+                tableBody.appendChild(row);
+            }
+        }
+
+        $(document).ready(function () {
+            $("#navbar-placeholder").load("navbar");
+            loadReport();
+        });
+    </script>
+</body>
+
+</html>

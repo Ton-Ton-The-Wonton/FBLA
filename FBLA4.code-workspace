@@ -1,0 +1,15 @@
+{
+    "folders": [
+        {
+            "path": ".."
+        },
+        {
+            "path": "../../../Downloads/partner copy"
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/Thumbs.db": false
+        }
+    }
+}

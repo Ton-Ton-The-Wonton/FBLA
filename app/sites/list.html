@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Search List</title>
+
+    <style>
+        #listTable {
+            border-collapse:
+                separate;
+            border-spacing:
+                0;
+            border-radius:
+                5px;
+        }
+
+        #listTable th,
+        #listTable td {
+            border:
+                1px solid #dee2e6;
+            padding:
+                0.75rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <div class="container-fluid mt-5">
+        <h2 class="text-center">Partner List</h2>
+
+        <div class="container d-flex justify-content-center">
+            <div class="form-group mb-3 w-50">
+                <input type="text" id="searchInput" class="form-control form-control-sm"
+                    placeholder="Search for names..">
+            </div>
+        </div>
+
+        <div class="container d-flex justify-content-center">
+            <div class="form-group mb-3 w-50">
+                <div class="row">
+                    <div class="col-md-3">
+                        <select id="filterName" class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option value="name">name</option>
+                            <option value="organization">organization</option>
+                            <option value="email">email</option>
+                            <option value="type_of_organization">type_of_organization</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="filterOperation" class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option value="=">=</option>
+                            <option value="like">like</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="filterValue" class="form-control form-control-sm"
+                            placeholder="Enter filter value..">
+                    </div>
+                    <div class="col-md-2">
+                        <button id="searchButton" class="btn btn-primary btn-sm">Search</button>
+                    </div>
+                    <div class="col-md-2">
+                        <button id="clearButton" class="btn btn-secondary btn-sm">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table id="listTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Organization</th>
+                            <th>Email</th>
+                            <th>Type of Organization</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:5003/partner/list";
+        const REQUEST_METHOD = "POST";
+
+        function search() {
+            var searchInput = document.getElementById("searchInput");
+            var filterName = document.getElementById("filterName");
+            var filterOperation = document.getElementById("filterOperation");
+            var filterValue = document.getElementById("filterValue");
+
+            var url;
+            if (searchInput.value == "") {
+                url = API_URL;
+            } else {
+                url = `${API_URL}?name=${encodeURIComponent(searchInput.value)}`;
+            }
+
+            var data;
+            if (filterName.value != "" && filterOperation.value != "") {
+                data = [
+                    {
+                        name: filterName.value,
+                        operation: filterOperation.value,
+                        value: filterValue.value
+                    }
+                ];
+            } else {
+                data = [];
+            }
+
+            $.ajax({
+                url: url,
+                type: REQUEST_METHOD,
+                data: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                success: function (response) {
+                    $("#listTable tbody").empty();
+
+                    for (var i = 0; i < response.data.length; i++) {
+                        var row = document.createElement("tr");
+                        var nameCell = document.createElement("td");
+                        var organizationCell = document.createElement("td");
+                        var emailCell = document.createElement("td");
+                        var typeCell = document.createElement("td");
+                        
+                        nameCell.textContent = response.data[i].name;
+                        row.appendChild(nameCell);
+                        organizationCell.textContent = response.data[i].organization;
+                        row.appendChild(organizationCell);
+                        emailCell.textContent = response.data[i].email;
+                        row.appendChild(emailCell);
+                        typeCell.textContent = response.data[i].type_of_organization;
+                        row.appendChild(typeCell);
+                        tableBody = document.getElementById("listTable").getElementsByTagName("tbody")[0];
+                        tableBody.appendChild(row);
+                    }
+                }, error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("Error: " + textStatus + " , " + errorThrown);
+                }
+            });
+        }
+
+        function clear() {
+            var searchInput = document.getElementById("searchInput");
+            var filterName = document.getElementById("filterName");
+            var filterOperation = document.getElementById("filterOperation");
+            var filterValue = document.getElementById("filterValue");
+
+            searchInput.value = '';
+            filterName.value = '';
+            filterOperation.value = '';
+            filterValue.value = '';
+            search();
+        }
+
+        $("#clearButton").click(clear);
+        $("#searchButton").click(search);
+
+        $(document).ready(function () {
+            $("#navbar-placeholder").load("navbar");
+            search();
+        });
+
+
+    </script>
+
+
+</body>
+
+</html>

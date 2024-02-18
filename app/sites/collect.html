@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Information Collection</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <div class="container mt-5">
+        <h2>Information Collection</h2>
+
+        <form id="infoForm" class="needs-validation" novalidate>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                        <div class="invalid-feedback">Please enter your name.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone:</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" required>
+                        <div class="invalid-feedback">Please enter your phone number.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="invalid-feedback">Please enter a valid email address.</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="organization">Organization:</label>
+                        <input type="text" class="form-control" id="organization" name="organization" required>
+                        <div class="invalid-feedback">Please enter your organization's name.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type_of_organization">Type of Organization:</label>
+                        <select class="form-control" id="type_of_organization" name="type_of_organization" required>
+                            <option value="0">UNKNOWN</option>
+                            <option value="1">GOV</option>
+                            <option value="2">NGO</option>
+                            <option value="3">EI</option>
+                            <option value="4">HCO</option>
+                            <option value="5">FND</option>
+                            <option value="6">FP</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a type of organization.</div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const phoneNumberPattern = /^\d+$/;
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        $(document).ready(function () {
+            $("#infoForm").on("submit", function (event) {
+                event.preventDefault();
+
+                var name = $("#name").val();
+                var phone = $("#phone").val();
+                var email = $("#email").val();
+                var organization = $("#organization").val();
+                var type_of_organization = $("#type_of_organization").val();
+
+                if (!validateForm(name, phone, email, organization, type_of_organization)) {
+                    return;
+                }
+
+                $.ajax({
+                    url: "http://localhost:5003/partner",
+                    type: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify({
+                        name: name,
+                        phone: phone,
+                        email: email,
+                        organization: organization,
+                        type_of_organization: parseInt(type_of_organization)
+                    }),
+                    success: function (response) {
+                        if (response.code != 0) {
+                            alert(response.msg);
+                        } else {
+                            alert("Information submitted successfully!");
+                            $("#infoForm")[0].reset();
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log("Error: " + textStatus + ", " + errorThrown);
+                        alert("An error occurred while submitting the information.");
+                    }
+                });
+            });
+        });
+
+        function validateForm(name, phone, email, organization, type_of_organization) {
+            if (name === "" || phone === "" || email === "" || organization === "" || type_of_organization === "") {
+                alert("All fields are required!");
+                return false;
+            }
+            if (!phoneNumberPattern.test(phone)) {
+                alert("Phone is not valid");
+                return false;
+            }
+
+            if (!emailPattern.test(email)) {
+                alert("Email is not valid");
+                return false;
+            }
+
+            return true;
+        }
+
+        $(document).ready(function () {
+            $("#navbar-placeholder").load("navbar");
+        });
+    </script>
+
+</body> 
+
+</html> 
