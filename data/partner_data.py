@@ -1,35 +1,19 @@
-"""partner data mapping"""
+"""interact with the partner table in the database"""
 
-from sqlalchemy import exc
-from sqlalchemy.sql import func
-from app.__init__ import db_session, logger
-from dao.models import Partner, partner_columns, TypeOfOrganizationEnum, get_enum_member_by_value
+from sqlalchemy import exc, func
+from app.__init__ import db_session
+from dao.models import Partner, partner_columns
 
-
-def init():
-    """init
-
-    init data
-    """
-
-    partners = [
-        Partner('admin', 'admin@localhost', "Google"),
-        Partner('John Doe', 'john.doe@example.com', "Amazon")
-    ]
-
-    db_session.add_all(partners)
-    db_session.commit()
+ENUM_TO_TYPE = [
+    "Unknown", "Governmental Organization", "Non-Governmental Organization",
+    "Educational/Research Institution", "Healthcare Organization",
+    "Community Center/Library", "For-Profit Business",
+    "Arts/Cultural Organization", "Sports/Recreational Organization", "Other"
+]
 
 
 def get_list(name="", filter_list=None):
-    """get_by_name
-
-    Args:
-        name: name
-
-    Returns:
-        list of partners filtered by name
-    """
+    """given the filter conditions, return the matching partners"""
 
     if name and name != "":
         filter_list.append({
@@ -43,31 +27,29 @@ def get_list(name="", filter_list=None):
     if filter_list:
         for f in filter_list:
             name = f["name"]
-            operation = f["operation"]
             value = f["value"]
 
             if name not in partner_columns:
                 continue
-            if operation == '=':
-                expr = getattr(Partner, name) == value
-            elif operation == 'like':
-                expr = getattr(Partner, name).like(f'%{value}%')
-            else:
-                logger.warning("Unsupported operation: %s", operation)
+
+            expr = getattr(Partner, name).like(f'%{value}%')
             query = query.where(expr)
 
     partners = query.all()
+    print("partners1: ", partners)
     partners = [p.as_dict() for p in partners]
+    print("partners2: ", partners)
 
-    for p in partners:
-        p["type_of_organization"] = get_enum_member_by_value(
-            TypeOfOrganizationEnum, p["type_of_organization"]).name
+    for partner in partners:
+        partner["type_of_organization"] = ENUM_TO_TYPE[
+            partner["type_of_organization"]]
 
     return partners
 
 
-def add(partner) -> int:
-    """add
+def add(partner):
+    """add a partner to the database
+
     Args:
         partner: a partner 
     Returns:
@@ -80,23 +62,22 @@ def add(partner) -> int:
 
         return 1
     except exc.IntegrityError as exception:
-        logger.warning("data: partner_data: add error: %s", exception)
-        
+        print("Exception: ", exception)
+
         return 0
 
 
-def group_by_type(name):
-    """showing the amount of each type_of_organization"""
+def group_by_type(grouping_attr):
+    """showing the amount of each type of organization"""
 
-    attr = getattr(Partner, name)
+    attr = getattr(Partner, grouping_attr)
     query = db_session.query(attr, func.count(Partner.id)).group_by(attr)
     groups = query.all()
 
-    if name == "type_of_organization":
+    if grouping_attr == "type_of_organization":
         groups = [{
             "type_of_organization":
-            get_enum_member_by_value(TypeOfOrganizationEnum,
-                                     group.type_of_organization).name,
+            ENUM_TO_TYPE[group.type_of_organization],
             "count":
             group[1]
         } for group in groups]

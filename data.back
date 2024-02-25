@@ -1,0 +1,19 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE partners (
+	id INTEGER NOT NULL, 
+	name VARCHAR(50) NOT NULL, 
+	email VARCHAR(120) NOT NULL, 
+	organization VARCHAR(120) NOT NULL, 
+	type_of_organization INTEGER NOT NULL, 
+	PRIMARY KEY (id), 
+	UNIQUE (name), 
+	UNIQUE (email)
+);
+INSERT INTO partners VALUES(1,'Jack','jack@gmail.com','Google',1);
+INSERT INTO partners VALUES(2,'Liu','liu@amazon.com','Amazon',3);
+INSERT INTO partners VALUES(3,'d','abc@gmail.com','d',3);
+INSERT INTO partners VALUES(4,'Daniel','daniel.walmart@gmail.com','Walmart',3);
+INSERT INTO partners VALUES(5,'Albert','abcostco@gmail.com','Costco',6);
+INSERT INTO partners VALUES(6,'ddd','ddd@hotmail.com','www',1);
+COMMIT;

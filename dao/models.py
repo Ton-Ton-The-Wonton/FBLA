@@ -1,35 +1,29 @@
-"""models"""
+"""construct data models"""
+
 from enum import Enum
 from sqlalchemy import Column, Integer, String, inspect
 from app.__init__ import Base
 
 
 class TypeOfOrganizationEnum(Enum):
-    """TypeOfOrganizationEnum"""
+    """types of organization map to integer value in the database"""
 
     UNKNOWN = 0
-    GOV = 1
-    NGO = 2
-    EI = 3  # Educational Institutions
-    HCO = 4  # Healthcare Organizations
-    FND = 5  # Foundations
-    FP = 6  # For-Profit
-
-
-def get_enum_member_by_value(enum_class, value):
-    """get enumerate member by value"""
-
-    for member in enum_class:
-        if member.value == value:
-            return member
-
-    return None
+    GOV = 1 # Governmental Organizations
+    NGO = 2 # Non-Governmental Organizations
+    EDU = 3  # Educational and Research Institutions
+    HLT = 4  # Healthcare Organizations
+    COM = 5  # Community Centers and Libraries 
+    FP = 6  # For-Profit Businesses
+    ART = 7  # Arts and Cultural Organizations
+    SPO = 8 # Sports and Recreational Organizations
+    OTH = 9 # Other
 
 
 class Partner(Base):
-    """Partner model"""
+    """partner database schema"""
 
-    __tablename__ = 'partners'
+    __tablename__ = "partners"
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False, default="", unique=True)
     email = Column(String(120), nullable=False, default="", unique=True)
@@ -46,14 +40,8 @@ class Partner(Base):
         self.organization = organization
         self.type_of_organization = type_of_organization
 
-    def __repr__(self):
-        return f'<Partner {self.name!r}>'
-
     def as_dict(self):
-        """as_dict
-        
-        serialize obj
-        """
+        """convert partner object into a dictionary"""
         
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Partners Report</title>
+
+    <style>
+        #organizationTable,
+        #typeTable {
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 5px;
+        }
+
+        #organizationTable th,
+        #organizationTable td,
+        #typeTable th,
+        #typeTable td {
+            border: 1px solid #dee2e6;
+            padding: 0.75rem;
+            table-layout: fixed;
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <div class="container-fluid mt-5">
+        <h2 class="text-center">Q&A Chatbot</h2>
+        <iframe src="http://localhost:8501/" style="min-width: 400px; width: 100%; min-height: 850px;"></iframe>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            /* render navbar */
+
+            $("#navbar-placeholder").load("navbar");
+        });
+    </script>
+</body>
+
+</html>

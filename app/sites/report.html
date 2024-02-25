@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <title>Report</title>
+    <title>Partners Report</title>
 
     <style>
         #organizationTable,
@@ -33,7 +33,7 @@
     <div id="navbar-placeholder"></div>
 
     <div class="container-fluid mt-5">
-        <h2 class="text-center">Partner Report</h2>
+        <h2 class="text-center">Partners Report</h2>
 
         <div class="row mt-5">
             <div class="col-md-12">
@@ -73,24 +73,24 @@
         const REQUEST_METHOD = "POST";
 
         function loadReport() {
+            /* Request to load report data */
+            
             $.ajax({
                 url: API_URL,
                 type: REQUEST_METHOD,
                 success: function (response) {
-                    if (response.code === 0) {
-                        populateOrganizationTable(response.data.organization_groups);
-                        populateTypeTable(response.data.type_groups);
-                    } else {
-                        console.log("Error: " + response.msg);
-                    }
+                    populateOrganizationTable(response.organization_groups);
+                    populateTypeTable(response.type_groups);
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
+                error: function (response, textStatus, errorThrown) {
                     console.log("Error: " + textStatus + " , " + errorThrown);
                 }
             });
         }
 
         function populateOrganizationTable(data) {
+            /* Populate group by organization table */
+
             $("#organizationTable tbody").empty();
 
             for (var i = 0; i < data.length; i++) {
@@ -109,6 +109,8 @@
         }
 
         function populateTypeTable(data) {
+            /* Populate group by type table */
+
             $("#typeTable tbody").empty();
 
             for (var i = 0; i < data.length; i++) {
@@ -127,6 +129,8 @@
         }
 
         $(document).ready(function () {
+            /* Render navbar */
+
             $("#navbar-placeholder").load("navbar");
             loadReport();
         });

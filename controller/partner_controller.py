@@ -1,23 +1,15 @@
-"""controller"""
+"""API for partner service"""
+
 from flask import Blueprint, jsonify, request
-from app import logger
-from dao.response import Response, RequestErrorResponse
 from dao.models import Partner
-from service import partner_service
+from data import partner_data
 
 partner_bp = Blueprint('partners', __name__, url_prefix='/partner')
 
 
 @partner_bp.route('/list', methods=["POST"])
 def get_list():
-    """get_list
-
-    Args:
-        name: name
-
-    Returns:
-        json response
-    """
+    """retrieve the list of partners based on the filter conditions"""
 
     err = validate_get_list_request(request.args, request.get_json())
     if err is not None:
@@ -27,63 +19,56 @@ def get_list():
     name = args.get("name")
     filter_list = request.get_json()
 
-    logger.info("args: %s", args)
-    logger.info("filter list: %s", filter_list)
-    partners = partner_service.get_list(name, filter_list)
-    response = jsonify(Response(0, partners).as_dict())
+    print("args: ", args)
+    print("filter list: ", filter_list)
+    
+    partners = partner_data.get_list(name, filter_list)
+    response = jsonify(partners)
 
     return response
 
 
 def validate_get_list_request(args, body):
-    """validate_get_list_request
-
-    Args:
-        args: request args
-        body: request body
-
-    Returns:
-        json response
-    """
+    """validate the filters for the /list endpoint"""
 
     if args.get("name") is not None and args.get("name") == "":
-        return jsonify(
-            RequestErrorResponse("name shoule not be empty string").as_dict())
+        return jsonify({"error": "name should not be empty string"})
 
     if body:
         if not isinstance(body, list):
-            return jsonify(
-                RequestErrorResponse("body shoule be list").as_dict())
+            return jsonify({"error": "body should be list"})
 
 
 @partner_bp.route('', methods=["POST"])
 def add():
-    """add
-
-    Returns:
-        json response
+    """add a partner to the database
+    return sucess message if added successfully,
+    return error message if failed to add with 500 status code
     """
 
     body = request.get_json()
-    logger.info("add a partner: %s", body)
+    print("body: ", body)
 
     partner = Partner(body.get("name"), body.get("email"),
                       body.get("organization"),
                       body.get("type_of_organization"))
 
-    succ = partner_service.add(partner)
-    if succ != 0:
-        return jsonify(Response(0, succ).as_dict())
+    val = partner_data.add(partner)
 
-    return jsonify(RequestErrorResponse("name or email exists").as_dict())
+    if val == 1:
+        return jsonify({"message": "successfully added"})
+    else:
+        return jsonify({"error": "failed to add"}), 500
 
 
 @partner_bp.route('/report', methods=["POST"])
 def report():
-    """report
+    """return the report of the partners in json format"""
 
-    some statistics of partners
-    """
+    type_groups = partner_data.group_by_type("type_of_organization")
+    organization_groups = partner_data.group_by_type("organization")
 
-    groups = partner_service.report()
-    return jsonify(Response(0, groups).as_dict())
+    return jsonify({
+        "type_groups": type_groups,
+        "organization_groups": organization_groups
+    })
