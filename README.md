@@ -78,9 +78,9 @@ crontab -l
 
 ## Documentation
 
-Boostrap: <https://getbootstrap.com/docs/5.3/getting-started/introduction/>
-jQuery: <https://api.jquery.com/>
-Flask: <https://flask.palletsprojects.com/en/3.0.x/>
-SQLite: <https://www.sqlite.org/docs.html>
-OpenAI: <https://platform.openai.com/docs/introduction>
-Streamlit: <https://docs.streamlit.io/knowledge-base/tutorials/build-conversational-apps#build-a-bot-that-mirrors-your-input>
+Boostrap: <https://getbootstrap.com/docs/5.3/getting-started/introduction/>  
+jQuery: <https://api.jquery.com/>  
+Flask: <https://flask.palletsprojects.com/en/3.0.x/>  
+SQLite: <https://www.sqlite.org/docs.html>  
+OpenAI: <https://platform.openai.com/docs/introduction>  
+Streamlit: <https://docs.streamlit.io/knowledge-base/tutorials/build-conversational-apps#build-a-bot-that-mirrors-your-input>  
