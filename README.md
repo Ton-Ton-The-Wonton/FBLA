@@ -36,7 +36,7 @@ Install Requirements:
 pip install -r requirements.txt
 ```  
 
-Install SQLite: <https://www.sqlite.org/download.html>  
+Install SQLite: <https://www.sqlite.org/download.**html**>  
 
 Run the Server:  
 

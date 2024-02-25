@@ -50,10 +50,10 @@
                                 class="form-control form-control-sm"
                                 onchange="checkSelection()">
                                 <option value></option>
-                                <option value="name">Name</option>
+                                <option value="name">Contact Name</option>
                                 <option
-                                    value="organization">Organization</option>
-                                <option value="email">Email</option>
+                                    value="organization">Organization Name</option>
+                                <option value="email">Contact Email</option>
                                 <option
                                     value="type_of_organization">Type of Organization</option>
                             </select>
@@ -75,9 +75,9 @@
                     <table id="listTable" class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Organization</th>
-                                <th>Email</th>
+                                <th>Contact Name</th>
+                                <th>Organization Name</th>
+                                <th>Contact Email</th>
                                 <th>Type of Organization</th>
                             </tr>
                         </thead>
@@ -95,7 +95,7 @@
         function checkSelection() {
             /* Check if the selected filter name is the type of orgnization
             if so, display a dropdown, otherwise display a text input */
-            
+
             console.log("In checkSelection")
             var filterName = document.getElementById("filterName");
             console.log("filterName: ", filterName)

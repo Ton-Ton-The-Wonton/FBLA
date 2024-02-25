@@ -37,11 +37,11 @@
 
         <div class="row mt-5">
             <div class="col-md-12">
-                <h4>Organization Groups</h4>
+                <h4>Group by Organization</h4>
                 <table id="organizationTable" class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Organization</th>
+                            <th>Organization Name</th>
                             <th>Count</th>
                         </tr>
                     </thead>
@@ -53,7 +53,7 @@
 
         <div class="row mt-5">
             <div class="col-md-12">
-                <h4>Type Groups</h4>
+                <h4>Group by Organization Type</h4>
                 <table id="typeTable" class="table table-striped">
                     <thead>
                         <tr>
@@ -74,7 +74,7 @@
 
         function loadReport() {
             /* Request to load report data */
-            
+
             $.ajax({
                 url: API_URL,
                 type: REQUEST_METHOD,
