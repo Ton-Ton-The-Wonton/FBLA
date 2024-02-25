@@ -14,7 +14,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker, declarative_base
 ABS_PATH = os.path.abspath("app/sites")
 app = Flask(__name__, template_folder=ABS_PATH)
 
-CORS(app) # TODO: research CORS
+CORS(app)
 logger = create_logger(app)
 
 # initialize driver. construct connection string between engine and database
@@ -24,7 +24,6 @@ engine = create_engine("sqlite:///data.db")
 db_session = scoped_session(
     sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
-# TODO: look into this
 # defines the base class for all models
 Base = declarative_base()
 Base.query = db_session.query_property()
