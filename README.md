@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a full-stack web application that the school’s Career and Technical Education Department to manage their business and community partners. The application is built using Bootstrap, jQuery, Flask, SQLite, OpenAI, and Streamlit. The application has four main pages: List, Add, Report, and Chatbot. The List page displays a list of partners with the ability to filter, the Add page allows users to add a new partner, the Report page displays a report of the partners by category, and the Chatbot page allows users to interact with a LLM-backed chatbot.
+This is a full-stack web application that allows the school’s Career and Technical Education Department to manage their business and community partners. The application is built using Bootstrap, jQuery, Flask, SQLite, OpenAI, and Streamlit. The application has four main pages: List, Add, Report, and Chatbot. The List page displays a list of partners with the ability to filter, the Add page allows users to add a new partner, the Report page displays a report of the partners by category, and the Chatbot page allows users to interact with a LLM-backed chatbot.
 
 **Architecture**:
 
