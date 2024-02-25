@@ -28,23 +28,23 @@ Chatbot Page:
 
 ## Initialization
 
-Install Python: <https://www.python.org/downloads/>
+Install Python: <https://www.python.org/downloads/>  
 
 Install Requirements:
 
 ```bash
 pip install -r requirements.txt
-```
+```  
 
-Install SQLite: <https://www.sqlite.org/download.html>
+Install SQLite: <https://www.sqlite.org/download.html>  
 
 Run the Server:  
 
 ```bash
 python3 main.py
-```
+```  
 
-To use the chatbot, a valid API key is needed: <https://platform.openai.com/docs/api-reference/authentication>
+To use the chatbot, a valid API key is needed: <https://platform.openai.com/docs/api-reference/authentication>  
 
 Run the Chatbot:
 
