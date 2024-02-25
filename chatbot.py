@@ -24,7 +24,6 @@ agent_executor = create_sql_agent(llm,
 # If the result is a list, remove all the brackets and quotation marks.
 # If there are multiple records in the result, separate each record in its own line.
 
-# TODO: Figure out line breaks
 PROMPT = """Given an input question, first create a SQLite query and execute it to find the answer,
 If the result is a list with a single element,
 return the first element of that element.
